@@ -1,29 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="www.thymeleaf.com">
-<head>
-<meta charset="ISO-8859-1" />
-<title>Insert title here</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" />
-<link rel="stylesheet" href="/style.css" />
+<head th:replace="/layout/layout :: head">
 </head>
 
 <body>
 
-	<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-		<a class="navbar-brand" href="#">Spring Boot</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse"
-			aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse">
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active"><a class="nav-link" href="#">Home</a></li>
-				<li class="nav-item"><a class="nav-link" href="#about"
-					th:href="@{/listar}">Clientes</a></li>
-			</ul>
-		</div>
-	</nav>
+	<header th:replace="/layout/layout :: header"></header>
 
 	<div class="container">
 		<h1 th:text="${titulo}" class="text-secondary"></h1>
@@ -57,6 +39,10 @@
 		</table>
 		<a class="btn btn-xs btn-success" th:href="@{/form}">Crear cliente</a>
 	</div>
+	
+	<!-- <a th:href="@{/get_one/11}">Get one()</a> 	
+	<a th:href="prueba.html">Pagina de prueba</a> -->
+	<footer th:replace="/layout/layout :: footer"></footer>
 
 </body>
 </html>

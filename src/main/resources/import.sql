@@ -1,2 +1,0 @@
-Insert into clientes (id, nombre, apellido, email, create_at) values (1, 'Bryan', 'Juela', 'bryan@email.com', '2019-03-26');
-Insert into clientes (id, nombre, apellido, email, create_at) values (2, 'Elena', 'Mendez', 'elena@email.com', '2019-03-26');

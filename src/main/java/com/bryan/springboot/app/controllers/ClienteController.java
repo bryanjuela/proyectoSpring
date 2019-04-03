@@ -1,10 +1,13 @@
 package com.bryan.springboot.app.controllers;
 
+import java.util.Calendar; 
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +26,19 @@ public class ClienteController {
 
 	@Autowired
 	private Service service;
+	
+	//metodo de prueba
+	@RequestMapping(value= "/get_one/{id}", method= RequestMethod.GET)
+	public ResponseEntity<?> getOne(@PathVariable("id") final Long id){
+		
+		if(id!= null && id> 0) {
+			Cliente cliente= service.findOne(id);
+			if(cliente!= null)
+				return new ResponseEntity<Cliente>(cliente, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
 	
 	@RequestMapping(value = "/listar")
 	public String listar(Model model) {
@@ -46,6 +62,11 @@ public class ClienteController {
 			model.addAttribute("titulo", "Formulario de cliente");
 			return "form";
 		}
+		Calendar calendar= Calendar.getInstance();
+		calendar.setTime(cliente.getCreateAt());
+		calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)+1);
+		cliente.setCreateAt(calendar.getTime());
+		
 		service.save(cliente);
 		status.setComplete();
 		return "redirect:listar";
