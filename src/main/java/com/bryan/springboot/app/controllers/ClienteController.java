@@ -40,6 +40,8 @@ public class ClienteController {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
+	/*Comentario de prueba*/
+	
 	@RequestMapping(value = "/listar")
 	public String listar(Model model) {
 		model.addAttribute("titulo","Listado de clientes");
