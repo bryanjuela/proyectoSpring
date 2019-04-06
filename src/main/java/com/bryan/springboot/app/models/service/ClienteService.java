@@ -3,6 +3,8 @@ package com.bryan.springboot.app.models.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bryan.springboot.app.models.dao.DAO;
@@ -36,6 +38,11 @@ public class ClienteService implements Service {
 	@Transactional
 	public void delete(Long id) {
 		dao.deleteById(id);;
+	}
+
+	@Override
+	public Page<Cliente> findAll(Pageable pageable) {
+		return dao.findAll(pageable);
 	}
 
 }//class

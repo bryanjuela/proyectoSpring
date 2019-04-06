@@ -37,10 +37,11 @@
 				</tr>
 			</tbody>
 		</table>
+		<nav th:replace="paginator-nav :: paginator"></nav>
 		<a class="btn btn-xs btn-success" th:href="@{/form}">Crear cliente</a>
 	</div>
 	
-	<!-- <a th:href="@{/get_one/11}">Get one()</a> 	
+	 <!-- <a th:href="@{/get_one/1}">Get one()</a> 	
 	<a th:href="prueba.html">Pagina de prueba</a> -->
 	<footer th:replace="/layout/layout :: footer"></footer>
 
