@@ -6,6 +6,9 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,11 +17,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.bryan.springboot.app.models.entity.Cliente;
 import com.bryan.springboot.app.models.service.Service;
+import com.bryan.springboot.app.util.paginator.PageRender;
 
 @Controller
 @SessionAttributes("cliente")
@@ -43,9 +48,13 @@ public class ClienteController {
 	/*Comentario de prueba*/
 	
 	@RequestMapping(value = "/listar")
-	public String listar(Model model) {
+	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+		Pageable pageable= PageRequest.of(page, 5);
+		Page<Cliente> clientes= service.findAll(pageable);
+		PageRender<Cliente> pageRender= new PageRender<>("/listar", clientes);
 		model.addAttribute("titulo","Listado de clientes");
-		model.addAttribute("clientes", service.findAll());
+		model.addAttribute("clientes", clientes);
+		model.addAttribute("page", pageRender);
 		return "listar";
 	}
 	
