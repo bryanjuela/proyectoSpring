@@ -1,5 +1,9 @@
 package com.bryan.springboot.app.controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Calendar; 
 import java.util.Map;
 
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bryan.springboot.app.models.entity.Cliente;
 import com.bryan.springboot.app.models.service.Service;
@@ -45,7 +50,19 @@ public class ClienteController {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
-	/*Comentario de prueba*/
+
+	@RequestMapping(value = "/ver/{id}")
+	public String ver(@PathVariable(value = "id") Long id, Map<String, Object> map) {
+		
+		Cliente cliente= service.findOne(id);
+		if(cliente!= null) {
+			map.put("cliente", cliente);
+			map.put("titulo", cliente.getNombre());
+			return "ver";
+		}
+		
+		return "redirect:/listar";
+	}
 	
 	@RequestMapping(value = "/listar")
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
@@ -67,12 +84,26 @@ public class ClienteController {
 	}
 	
 	@RequestMapping(value = "/form", method=RequestMethod.POST)
-	public String guardar(@Valid Cliente cliente, BindingResult result, Model model, SessionStatus status) {
+	public String guardar(@Valid Cliente cliente, BindingResult result, Model model, 
+			@RequestParam("file")MultipartFile foto, SessionStatus status) {
 		//si el formulario tiene errores, vuelve a cargar el formulario  vacío
 		if(result.hasErrors()) {
 			model.addAttribute("titulo", "Formulario de cliente");
 			return "form";
 		}
+		
+		if(!foto.isEmpty()) {
+			String rootPath= "D://Temp//uploads";
+			try {
+				byte[] bytes= foto.getBytes();
+				Path rutaCompleta= Paths.get(rootPath+ "//"+ foto.getOriginalFilename());
+				Files.write(rutaCompleta, bytes);
+				cliente.setFoto(foto.getOriginalFilename());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		Calendar calendar= Calendar.getInstance();
 		calendar.setTime(cliente.getCreateAt());
 		calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)+1);
